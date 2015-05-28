@@ -1,2 +1,7 @@
 ---
 # vars file for redis
+
+redis_url: http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz
+redis_download_dir: /usr/local/src
+redis_src_dir: "{{ redis_download_dir }}/redis-{{ redis_version }}"
+redis_service_name: redis
