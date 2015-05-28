@@ -2,9 +2,9 @@
 
 EXEC=/usr/local/bin/redis-server
 CLIEXEC=/usr/local/bin/redis-cli
-PIDFILE=/var/run/redis.pid
-CONF="/etc/redis/redis.conf"
-REDISPORT="6379"
+PIDFILE={{ redis_pid_file }}
+CONF="{{ redis_conf_file }}"
+REDISPORT="{{ redis_port }}"
 
 ###############
 # SysV Init Information
