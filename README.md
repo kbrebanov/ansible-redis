@@ -1,6 +1,8 @@
 redis
 =====
 
+[![Ansible Galaxy](https://img.shields.io/badge/galaxy-kbrebanov.redis-660198.svg)](https://galaxy.ansible.com/list#/roles/3957)
+
 Installs and configures Redis
 
 Requirements
