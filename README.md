@@ -15,8 +15,8 @@ Role Variables
 
 | Name            | Default                                                          | Description                   |
 |-----------------|------------------------------------------------------------------|-------------------------------|
-| redis_version   | 3.0.1                                                            | Version of Redis to install   |
-| redis_sha256sum | 0e21be5d7c5e6ab6adcbed257619897db59be9e1ded7ef6fd1582d0cdb5e5bb7 | SHA 256 checksum of package   |
+| redis_version   | 3.0.3                                                            | Version of Redis to install   |
+| redis_sha256sum | 1d08fa665b16d0950274dfbd47fbbcf3485e43e901021338640a0334666e9da5 | SHA 256 checksum of package   |
 
 Dependencies
 ------------
