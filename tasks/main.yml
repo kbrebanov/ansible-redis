@@ -39,7 +39,9 @@
   tags: redis
 
 - name: Install Redis
-  sudo: yes
+  become: yes
+  become_user: root
+  become_method: sudo
   command: make install
   args:
     chdir: "{{ redis_src_dir }}"
