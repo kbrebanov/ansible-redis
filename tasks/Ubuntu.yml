@@ -2,6 +2,12 @@
 # tasks file for redis (Ubuntu specific)
 
 - name: Install Redis dependencies
-  apt: name={{ item }} state=present update_cache=yes
-  with_items: redis_packages
-  tags: redis
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "{{ redis_packages }}"
+  tags:
+    - redis

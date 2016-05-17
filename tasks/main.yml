@@ -3,89 +3,112 @@
 
 - name: Include distribution specific variables
   include_vars: "{{ ansible_distribution }}.yml"
-  tags: redis
+  tags:
+    - redis
 
 - include: CentOS.yml
   when: ansible_distribution == "CentOS"
-  tags: redis
+  tags:
+    - redis
 
 - include: Ubuntu.yml
   when: ansible_distribution == "Ubuntu"
-  tags: redis
+  tags:
+    - redis
 
 - name: Download Redis
-  get_url: >
-    url={{ redis_url }}
-    dest={{ redis_download_dir }}
-    sha256sum={{ redis_sha256sum }}
-  tags: redis
+  become: yes
+  get_url:
+    url: "{{ redis_url }}"
+    dest: "{{ redis_download_dir }}"
+    sha256sum: "{{ redis_sha256sum }}"
+  tags:
+    - redis
 
 - name: Uncompress Redis archive
-  unarchive: >
-    src={{ redis_download_dir }}/redis-{{ redis_version }}.tar.gz
-    dest={{ redis_download_dir }}
-    owner=root
-    group=root
-    mode=0755
-    copy=no
-    creates={{ redis_download_dir }}/redis-{{ redis_version }}
-  tags: redis
+  become: yes
+  unarchive:
+    src: "{{ redis_download_dir }}/redis-{{ redis_version }}.tar.gz"
+    dest: "{{ redis_download_dir }}"
+    owner: root
+    group: root
+    mode: 0755
+    copy: no
+    creates: "{{ redis_download_dir }}/redis-{{ redis_version }}"
+  tags:
+    - redis
 
 - name: Compile Redis
+  become: yes
   command: make
   args:
     chdir: "{{ redis_src_dir }}"
     creates: "{{ redis_src_dir }}/src/redis-server"
-  tags: redis
+  tags:
+    - redis
 
 - name: Install Redis
   become: yes
-  become_user: root
-  become_method: sudo
   command: make install
   args:
     chdir: "{{ redis_src_dir }}"
     creates: /usr/local/bin/redis-server
-  tags: redis
+  tags:
+    - redis
 
 - name: Create Redis configuration directory
-  file: >
-    path=/etc/redis
-    owner=root
-    group=root
-    mode=0755
-    state=directory
-  tags: redis
+  become: yes
+  file:
+    path: /etc/redis
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  tags:
+    - redis
 
 - name: Create Redis working directory
-  file: >
-    path={{ redis_working_directory }}
-    owner=root
-    group=root
-    mode=0755
-    state=directory
-  tags: redis
+  become: yes
+  file:
+    path: "{{ redis_working_directory }}"
+    owner: root
+    group: root
+    mode: 0755
+    state: directory
+  tags:
+    - redis
 
 - name: Create Redis configuration file
-  template: >
-    src=redis.conf.j2
-    dest={{ redis_conf_file }}
-    owner=root
-    group=root
-    mode=0644
-  notify: restart redis
-  tags: redis
+  become: yes
+  template:
+    src: redis.conf.j2
+    dest: "{{ redis_conf_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart redis
+  tags:
+    - redis
 
 - name: Create Redis init script
-  template: >
-    src=redis.sh.j2
-    dest=/etc/init.d/redis
-    owner=root
-    group=root
-    mode=0755
-  notify: restart redis
-  tags: redis
+  become: yes
+  template:
+    src: redis.sh.j2
+    dest: /etc/init.d/redis
+    owner: root
+    group: root
+    mode: 0755
+  notify:
+    - restart redis
+  tags:
+    - redis
 
 - name: Ensure Redis is started and enabled on boot
-  service: name={{ redis_service_name }} state=started enabled=yes
-  tags: redis
+  become: yes
+  service:
+    name: "{{ redis_service_name }}"
+    state: started
+    enabled: yes
+  tags:
+    - redis
