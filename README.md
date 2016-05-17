@@ -27,10 +27,10 @@ Example Playbook
 ----------------
 
 Install Redis
-```
+```yaml
 - hosts: all
   roles:
-    - { role: kbrebanov.redis }
+    - kbrebanov.redis
 ```
 
 License
