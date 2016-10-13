@@ -16,6 +16,27 @@
   tags:
     - redis
 
+- name: Create Redis group
+  become: yes
+  group:
+    name: "{{ redis_group }}"
+    system: yes
+    state: present
+  tags:
+    - redis
+
+- name: Create Redis user
+  become: yes
+  user:
+    name: "{{ redis_user }}"
+    createhome: no
+    group: "{{ redis_group }}"
+    shell: /bin/false
+    system: yes
+    state: present
+  tags:
+    - redis
+
 - name: Download Redis
   become: yes
   get_url:
@@ -32,7 +53,6 @@
     dest: "{{ redis_download_dir }}"
     owner: root
     group: root
-    mode: 0755
     copy: no
     creates: "{{ redis_download_dir }}/redis-{{ redis_version }}"
   tags:
@@ -61,7 +81,29 @@
   file:
     path: /etc/redis
     owner: root
-    group: root
+    group: "{{ redis_group }}"
+    mode: 0755
+    state: directory
+  tags:
+    - redis
+
+- name: Create Redis log directory
+  become: yes
+  file:
+    path: "{{ redis_log_dir }}"
+    owner: "{{ redis_user }}"
+    group: "{{ redis_group }}"
+    mode: 0755
+    state: directory
+  tags:
+    - redis
+
+- name: Create Redis pid directory
+  become: yes
+  file:
+    path: "{{ redis_pid_dir }}"
+    owner: "{{ redis_user }}"
+    group: "{{ redis_group }}"
     mode: 0755
     state: directory
   tags:
@@ -71,9 +113,9 @@
   become: yes
   file:
     path: "{{ redis_working_directory }}"
-    owner: root
-    group: root
-    mode: 0755
+    owner: "{{ redis_user }}"
+    group: "{{ redis_group }}"
+    mode: 0770
     state: directory
   tags:
     - redis
@@ -91,15 +133,31 @@
   tags:
     - redis
 
-- name: Create Redis init script
+- name: Create Redis upstart script
   become: yes
   template:
-    src: redis.sh.j2
-    dest: /etc/init.d/redis
+    src: redis.upstart.j2
+    dest: /etc/init/redis.conf
     owner: root
     group: root
-    mode: 0755
+    mode: 0644
+  when: ansible_distribution_release|lower == 'trusty'
   notify:
+    - restart redis
+  tags:
+    - redis
+
+- name: Create Redis systemd service
+  become: yes
+  template:
+    src: redis.service.j2
+    dest: /etc/systemd/system/redis.service
+    owner: root
+    group: root
+    mode: 0644
+  when: ansible_distribution_release|lower == 'xenial'
+  notify:
+    - reload systemd
     - restart redis
   tags:
     - redis

@@ -13,10 +13,12 @@ This role requires Ansible 1.9 or higher.
 Role Variables
 --------------
 
-| Name            | Default                                                          | Description                 |
-|:----------------|:-----------------------------------------------------------------|:----------------------------|
-| redis_version   | 3.2.0                                                            | Version of Redis to install |
-| redis_sha256sum | 989f1af3dc0ac1828fdac48cd6c608f5a32a235046dddf823226f760c0fd8762 | SHA 256 checksum of package |
+| Name            | Default                                                          | Description                  |
+|:----------------|:-----------------------------------------------------------------|:-----------------------------|
+| redis_version   | 3.2.0                                                            | Version of Redis to install  |
+| redis_sha256sum | 989f1af3dc0ac1828fdac48cd6c608f5a32a235046dddf823226f760c0fd8762 | SHA 256 checksum of package  |
+| redis_port      | 6379                                                             | Port that Redis will bind to |
+
 
 Dependencies
 ------------

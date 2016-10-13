@@ -1,6 +1,12 @@
 ---
 # handlers file for redis
 
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
+  tags:
+    - redis
+
 - name: restart redis
   become: yes
   service:

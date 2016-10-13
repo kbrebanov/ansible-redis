@@ -1,0 +1,20 @@
+# {{ ansible_managed }}
+
+description "Redis In-Memory Data Store"
+author "Kevin Brebanov"
+
+start on filesystem or runlevel [2345]
+stop on shutdown
+
+expect fork
+
+setuid redis
+setgid redis
+
+respawn
+respawn limit 10 10
+kill timeout 10
+
+script
+    exec /usr/local/bin/redis-server {{ redis_conf_file }}
+end script
