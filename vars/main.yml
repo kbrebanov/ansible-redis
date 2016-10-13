@@ -5,8 +5,11 @@ redis_url: http://download.redis.io/releases/redis-{{ redis_version }}.tar.gz
 redis_download_dir: /usr/local/src
 redis_src_dir: "{{ redis_download_dir }}/redis-{{ redis_version }}"
 redis_service_name: redis
-redis_pid_file: /var/run/redis.pid
+redis_pid_dir: /var/run/redis
+redis_pid_file: "{{ redis_pid_dir }}/redis.pid"
 redis_conf_file: /etc/redis/redis.conf
-redis_log_file: /var/log/redis.log
+redis_log_dir: /var/log/redis
+redis_log_file: "{{ redis_log_dir }}/redis.log"
 redis_working_directory: /var/lib/redis
-redis_port: 6379
+redis_user: redis
+redis_group: redis

@@ -3,3 +3,5 @@
 
 redis_version: 3.0.5
 redis_sha256sum: 4c176826eee909fbdc63db1c15adc22aab42d758043829e556f4331e6a5bd480
+
+redis_port: 6379

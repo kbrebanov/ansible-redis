@@ -1,6 +1,16 @@
 ---
 # handlers file for redis
 
+- name: reload systemd
+  become: yes
+  command: systemctl daemon-reload
+  tags:
+    - redis
+
 - name: restart redis
-  service: name={{ redis_service_name }} state=restarted
-  tags: redis
+  become: yes
+  service:
+    name: "{{ redis_service_name }}"
+    state: restarted
+  tags:
+    - redis
